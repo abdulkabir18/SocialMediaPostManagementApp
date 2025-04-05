@@ -78,3 +78,4 @@ C:\Users\USER\Desktop\sysbeamsExecrise\Projects\SocialMediaPostManager\obj\Debug
 C:\Users\USER\Desktop\sysbeamsExecrise\Projects\SocialMediaPostManager\obj\Debug\net8.0\SocialMediaPostManager.pdb
 C:\Users\USER\Desktop\sysbeamsExecrise\Projects\SocialMediaPostManager\obj\Debug\net8.0\SocialMediaPostManager.genruntimeconfig.cache
 C:\Users\USER\Desktop\sysbeamsExecrise\Projects\SocialMediaPostManager\obj\Debug\net8.0\ref\SocialMediaPostManager.dll
+C:\Users\USER\Desktop\sysbeamsExecrise\Projects\SocialMediaPostManager\obj\Debug\net8.0\SocialMediaPostManager.sourcelink.json

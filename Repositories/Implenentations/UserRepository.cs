@@ -19,7 +19,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = "select Email, Password, Role, IsDelete from users where (Email = @Email && Password = @Password)";
+            var query = "select Id,Email, Password, Role, IsDelete from users where (Email = @Email && Password = @Password)";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Email", email);
             sqlCommand.Parameters.AddWithValue("@Password", password);
@@ -28,6 +28,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             {
                 return new User
                 {
+                    Id = Guid.Parse(reader["Id"].ToString() ?? ""),
                     Email = reader["Email"].ToString() ?? "",
                     Password = reader["Password"].ToString() ?? "",
                     Role = (Role)Enum.Parse(typeof(Role), reader["Role"].ToString() ?? ""),
@@ -56,7 +57,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = "select Email, Password, Role, IsDelete from users";
+            var query = "select Id,Email, Password, Role, IsDelete from users";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             var users = new List<User>();
             using var reader = sqlCommand.ExecuteReader();
@@ -65,6 +66,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                 users.Add(
                     new User
                     {
+                        Id = Guid.Parse(reader["Id"].ToString() ?? ""),
                         Email = reader["Email"].ToString() ?? "",
                         Password = reader["Password"].ToString() ?? "",
                         Role = (Role)Enum.Parse(typeof(Role), reader["Role"].ToString() ?? ""),

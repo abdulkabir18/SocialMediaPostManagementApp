@@ -49,8 +49,7 @@ namespace SocialMediaPostManager.Services.Implementations
         public Result<string> EditMediaUser(EditSocialMediaUserRequestModel edit)
         {
             var mediauser = _socialMediaUserRepository.GetMediaUser(edit.Id);
-            var user = _userRepository.GetUsers().SingleOrDefault(a => a.Email == edit.Email.ToLower());
-            if (mediauser == null || user == null)
+            if (mediauser == null)
             {
                 return new Result<string>
                 {
@@ -59,38 +58,45 @@ namespace SocialMediaPostManager.Services.Implementations
                     Data = null
                 };
             }
+            // var user = _userRepository.GetUsers().FirstOrDefault(a => a.Email == mediauser.Email);
+            // if (user == null)
+            // {
+            //     return new Result<string>
+            //     {
+            //         Status = false,
+            //         Message = $"No details found for {edit.FirstName} {edit.LastName}",
+            //         Data = null
+            //     };
+            // }
 
-            bool isEmailExist = _userRepository.CheckIfEmailExist(user.Email.ToLower());
-            if (isEmailExist)
-            {
-                return new Result<string>
-                {
-                    Status = false,
-                    Message = $"Email is already associated with another account",
-                    Data = null
-                };
-            }
+            // bool isEmailExist = _userRepository.CheckIfEmailExist(user.Email.ToLower());
+            // if (isEmailExist)
+            // {
+            //     return new Result<string>
+            //     {
+            //         Status = false,
+            //         Message = $"Email is already associated with another account",
+            //         Data = null
+            //     };
+            // }
 
-            bool isUserNameExist = _socialMediaUserRepository.CheckIfUserNameExist(edit.UserName);
-            if (isUserNameExist)
-            {
-                return new Result<string>
-                {
-                    Status = false,
-                    Message = $"UserName is already taken",
-                    Data = null
-                };
-            }
+            // bool isUserNameExist = _socialMediaUserRepository.CheckIfUserNameExist(edit.UserName);
+            // if (isUserNameExist)
+            // {
+            //     return new Result<string>
+            //     {
+            //         Status = false,
+            //         Message = $"UserName is already taken",
+            //         Data = null
+            //     };
+            // }
 
-            user.Email = edit.Email.ToLower();
-            _userRepository.Update(user);
 
             mediauser.FirstName = edit.FirstName;
             mediauser.LastName = edit.LastName;
             mediauser.Address = edit.Address;
             mediauser.DateOfBirth = edit.DateOfBirth;
             mediauser.UserName = edit.UserName;
-            mediauser.Email = edit.Email.ToLower();
 
             _socialMediaUserRepository.Update(mediauser);
             return new Result<string>

@@ -46,6 +46,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             {
                 return new SocialMediaUser
                 {
+                    Id = Guid.Parse(reader["Id"].ToString() ?? ""),
                     Email = reader["Email"].ToString() ?? "",
                     FirstName = reader["FirstName"].ToString() ?? "",
                     LastName = reader["LastName"].ToString() ?? "",
@@ -63,7 +64,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = "select Email,FirstName,UserName,LastName,Address,Gender,IsDelete,DateOfBirth from SocialMediaUsers where(Id = @Id)";
+            var query = "select Id,Email,FirstName,UserName,LastName,Address,Gender,IsDelete,DateOfBirth from SocialMediaUsers where Id = @Id";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", id);
             var reader = sqlCommand.ExecuteReader();
@@ -71,6 +72,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             {
                 return new SocialMediaUser
                 {
+                    Id = Guid.Parse(reader["Id"].ToString() ?? ""),
                     Email = reader["Email"].ToString() ?? "",
                     FirstName = reader["FirstName"].ToString() ?? "",
                     LastName = reader["LastName"].ToString() ?? "",
@@ -97,6 +99,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                 mediaUsers.Add(
                     new SocialMediaUser
                     {
+                        Id = Guid.Parse(reader["Id"].ToString() ?? ""),
                         Email = reader["Email"].ToString() ?? "",
                         FirstName = reader["FirstName"].ToString() ?? "",
                         LastName = reader["LastName"].ToString() ?? "",
@@ -137,7 +140,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = @"update SocialMediaUsers set Email=@Email,FirstName=@FirstName,LastName=@LastName,UserName=@UserName,Gender=@Gender,Address=@Address,DateOfBirth=@DateOfBirth where Id=@Id";
+            var query = @"update SocialMediaUsers set Email = @Email,FirstName=@FirstName,LastName=@LastName,UserName=@UserName,Gender=@Gender,Address=@Address,DateOfBirth=@DateOfBirth where Id=@Id";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", mediaUser.Id);
             sqlCommand.Parameters.AddWithValue("@Email", mediaUser.Email);

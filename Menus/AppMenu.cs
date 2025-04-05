@@ -12,6 +12,7 @@ namespace SocialMediaPostManager.Menus
         private readonly ISocialMediaUserService _socialMediaUserService;
         private readonly IPostService _postService;
         private readonly ICommentService _commentService;
+        private readonly ILikeService _likeService;
 
         public AppMenu()
         {
@@ -19,6 +20,7 @@ namespace SocialMediaPostManager.Menus
             _socialMediaUserService = new SocialMediaUserService();
             _postService = new PostService();
             _commentService = new CommentService();
+            _likeService = new LikeService();
         }
 
         public void StartApp()
@@ -96,11 +98,6 @@ namespace SocialMediaPostManager.Menus
             {
                 Console.Beep();
                 Console.WriteLine("Username is required");
-                RegisterMenu();
-            }
-            else if (userName.Length < 3 || userName.Length > 15)
-            {
-                Console.WriteLine("Username must be between 3 and 15 characters");
                 RegisterMenu();
             }
             else if (!userName.All(char.IsLetterOrDigit))
@@ -185,9 +182,9 @@ namespace SocialMediaPostManager.Menus
         public void LoginMenu()
         {
             Console.Write("Email:\t");
-            string email = Console.ReadLine();
+            string email = Console.ReadLine()!;
             Console.Write("Password:\t");
-            string password = Console.ReadLine();
+            string password = Console.ReadLine()!;
             if (email == null || password == null)
             {
                 Console.WriteLine("email or password cant be null");
