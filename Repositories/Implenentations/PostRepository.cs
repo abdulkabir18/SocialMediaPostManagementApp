@@ -126,14 +126,14 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = @"insert into posts(Id,Title,Content,SocialMediaUserId,DateCreated,CreatedBy,LikeCount,CommentCount,IsDelete) 
+            var query = @"insert into posts(Id,Title,Content,SocialMediaUserId,DateCreated,CreatedBy,IsDelete) 
                 values(@Id,@Title,@Content,@SocialMediaUserId,@DateCreated,@CreatedBy,@IsDelete)";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", post.Id);
             sqlCommand.Parameters.AddWithValue("@Title", post.Title);
             sqlCommand.Parameters.AddWithValue("@Content", post.Content);
             sqlCommand.Parameters.AddWithValue("@SocialMediaUserId", post.SocialMediaUserId);
-            sqlCommand.Parameters.AddWithValue("@DateCreated", post.DateCreated.ToString());
+            sqlCommand.Parameters.AddWithValue("@DateCreated", post.DateCreated);
             sqlCommand.Parameters.AddWithValue("@CreatedBy", post.CreatedBy);
             sqlCommand.Parameters.AddWithValue("@IsDelete", post.IsDelete.ToString());
             sqlCommand.ExecuteNonQuery();

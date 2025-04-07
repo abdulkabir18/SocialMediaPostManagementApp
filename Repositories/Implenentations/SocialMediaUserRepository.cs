@@ -53,7 +53,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                     UserName = reader["UserName"].ToString() ?? "",
                     Address = reader["Address"].ToString() ?? "",
                     Gender = (Gender)Enum.Parse(typeof(Gender), reader["Gender"].ToString() ?? ""),
-                    DateOfBirth = DateOnly.Parse(reader["DateOfBirth"].ToString() ?? ""),
+                    DateOfBirth = DateOnly.FromDateTime(DateTime.Parse(reader["DateOfBirth"].ToString() ?? "")),
                     IsDelete = Convert.ToBoolean(reader["IsDelete"])
                 };
             }
@@ -79,7 +79,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                     UserName = reader["UserName"].ToString() ?? "",
                     Address = reader["Address"].ToString() ?? "",
                     Gender = (Gender)Enum.Parse(typeof(Gender), reader["Gender"].ToString() ?? ""),
-                    DateOfBirth = DateOnly.Parse(reader["DateOfBirth"].ToString() ?? ""),
+                    DateOfBirth = DateOnly.FromDateTime(DateTime.Parse(reader["DateOfBirth"].ToString() ?? "")),
                     IsDelete = Convert.ToBoolean(reader["IsDelete"])
                 };
             }
@@ -106,7 +106,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                         UserName = reader["UserName"].ToString() ?? "",
                         Address = reader["Address"].ToString() ?? "",
                         Gender = (Gender)Enum.Parse(typeof(Gender), reader["Gender"].ToString() ?? ""),
-                        DateOfBirth = DateOnly.Parse(reader["DateOfBirth"].ToString() ?? ""),
+                        DateOfBirth = DateOnly.FromDateTime(DateTime.Parse(reader["DateOfBirth"].ToString() ?? "")),
                         IsDelete = bool.Parse(reader["IsDelete"].ToString() ?? "")
                     }
                 );
@@ -128,9 +128,9 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                 sqlCommand.Parameters.AddWithValue("@FirstName", mediaUser.FirstName);
                 sqlCommand.Parameters.AddWithValue("@LastName", mediaUser.LastName);
                 sqlCommand.Parameters.AddWithValue("@UserName", mediaUser.UserName);
-                sqlCommand.Parameters.AddWithValue("@Gender", mediaUser.Gender);
+                sqlCommand.Parameters.AddWithValue("@Gender", mediaUser.Gender.ToString());
                 sqlCommand.Parameters.AddWithValue("@Address", mediaUser.Address);
-                sqlCommand.Parameters.AddWithValue("@DateOfBirth", mediaUser.DateOfBirth);
+                sqlCommand.Parameters.AddWithValue("@DateOfBirth", mediaUser.DateOfBirth.ToString("yyyy-MM-dd"));
                 sqlCommand.Parameters.AddWithValue("@IsDelete", mediaUser.IsDelete.ToString());
                 sqlCommand.ExecuteNonQuery();
             }
@@ -149,7 +149,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             sqlCommand.Parameters.AddWithValue("@UserName", mediaUser.UserName);
             sqlCommand.Parameters.AddWithValue("@Gender", mediaUser.Gender);
             sqlCommand.Parameters.AddWithValue("@Address", mediaUser.Address);
-            sqlCommand.Parameters.AddWithValue("@DateOfBirth", mediaUser.DateOfBirth);
+            sqlCommand.Parameters.AddWithValue("@DateOfBirth", mediaUser.DateOfBirth.ToString("yyyy-MM-dd"));
             sqlCommand.ExecuteNonQuery();
         }
     }

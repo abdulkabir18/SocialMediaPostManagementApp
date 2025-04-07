@@ -63,7 +63,7 @@ namespace SocialMediaPostManager.Services.Implementations
                 Content = createPost.Content,
                 Title = createPost.Title,
                 SocialMediaUserId = createPost.SocialMediaUserId,
-                CreatedBy = $"{mediaUser.FirstName} {mediaUser.FirstName}"
+                CreatedBy = $"{mediaUser.FirstName} {mediaUser.LastName}"
             };
             _postRepository.Persist(post);
             return new Result<string>

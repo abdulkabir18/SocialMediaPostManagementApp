@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using SocialMediaPostManager.Dtos;
 using SocialMediaPostManager.Models.Entities;
 using SocialMediaPostManager.Models.Enum;
@@ -51,81 +52,138 @@ namespace SocialMediaPostManager.Menus
 
         public void RegisterMenu()
         {
-            Console.Write("FirstName:\t");
-            string firstName = Console.ReadLine() ?? string.Empty;
-            if (string.IsNullOrEmpty(firstName) || string.IsNullOrWhiteSpace(firstName))
+            string firstName;
+            do
             {
-                Console.Beep();
-                Console.WriteLine("FirstName is required");
-                RegisterMenu();
-            }
+                Console.Write("FirstName:\t");
+                firstName = Console.ReadLine() ?? string.Empty;
 
-            Console.Write("LastName:\t");
-            string lastName = Console.ReadLine() ?? string.Empty;
-            if (string.IsNullOrEmpty(lastName) || string.IsNullOrWhiteSpace(lastName))
-            {
-                Console.Beep();
-                Console.WriteLine("LastName is required");
-                RegisterMenu();
+                if (string.IsNullOrEmpty(firstName) || string.IsNullOrWhiteSpace(firstName))
+                {
+                    Console.Beep();
+                    Console.WriteLine("FirstName is required. Please enter a valid input");
+                }
             }
+            while (string.IsNullOrEmpty(firstName) || string.IsNullOrWhiteSpace(firstName));
 
-            Console.Write("Address:\t");
-            string? address = Console.ReadLine();
-            if (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address))
+            string lastName;
+            do
             {
-                Console.Beep();
-                Console.WriteLine("Address is required");
-                RegisterMenu();
-            }
+                Console.Write("LastName:\t");
+                lastName = Console.ReadLine() ?? string.Empty;
 
-            Console.Write("Email:\t");
-            string email = Console.ReadLine() ?? string.Empty;
-            if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
-            {
-                Console.Beep();
-                Console.WriteLine("Email is required");
-                RegisterMenu();
+                if (string.IsNullOrEmpty(lastName) || string.IsNullOrWhiteSpace(lastName))
+                {
+                    Console.Beep();
+                    Console.WriteLine("LastName is required. Please enter a valid input");
+                }
             }
-            else if (!email.EndsWith("@gmail.com") || email.Length < 20)
-            {
-                Console.WriteLine("Invalid email");
-                RegisterMenu();
-            }
+            while (string.IsNullOrEmpty(lastName) || string.IsNullOrWhiteSpace(lastName));
 
-            Console.Write("UserName:\t");
-            string userName = Console.ReadLine() ?? string.Empty;
-            if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
+            string address;
+            do
             {
-                Console.Beep();
-                Console.WriteLine("Username is required");
-                RegisterMenu();
+                Console.Write("Address:\t");
+                address = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address))
+                {
+                    Console.Beep();
+                    Console.WriteLine("Address is required");
+                }
             }
-            else if (!userName.All(char.IsLetterOrDigit))
-            {
-                Console.WriteLine("Username must only contain letters and numbers");
-                RegisterMenu();
-            }
+            while (string.IsNullOrEmpty(address) || string.IsNullOrWhiteSpace(address));
 
-            Console.Write("Password:\t");
-            string password = Console.ReadLine() ?? string.Empty;
-            if (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password))
+            string email;
+            string pattern = @"^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com)$";
+            do
             {
-                Console.Beep();
-                Console.WriteLine("Password is required");
-                RegisterMenu();
+                Console.Write("Email:\t");
+                email = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, pattern))
+                {
+                    Console.Beep();
+                    Console.WriteLine("Email is required and Please enter a valid email");
+                }
             }
-            else if (password.Length < 8 || !password.Any(char.IsLower) || !password.Any(char.IsUpper) || !password.Any(char.IsDigit))
+            while (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, pattern));
+
+            // Console.Write("Email:\t");
+            // string email = Console.ReadLine() ?? string.Empty;
+            // if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+            // {
+            //     Console.Beep();
+            //     Console.WriteLine("Email is required");
+            //     RegisterMenu();
+            // }
+            // else if (!email.EndsWith("@gmail.com") || email.Length < 20)
+            // {
+            //     Console.WriteLine("Invalid email");
+            //     RegisterMenu();
+            // }
+
+            string userName;
+            do
             {
-                Console.WriteLine("Invalid password");
-                RegisterMenu();
+                Console.Write("UserName:\t");
+                userName = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName) || !userName.All(char.IsLetterOrDigit))
+                {
+                    Console.Beep();
+                    Console.WriteLine("Username is required");
+                }
             }
+            while (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName) || !userName.All(char.IsLetterOrDigit));
+
+            // Console.Write("UserName:\t");
+            // string userName = Console.ReadLine() ?? string.Empty;
+            // if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
+            // {
+            //     Console.Beep();
+            //     Console.WriteLine("Username is required");
+            //     RegisterMenu();
+            // }
+            // else if (!userName.All(char.IsLetterOrDigit))
+            // {
+            //     Console.WriteLine("Username must only contain letters and numbers");
+            //     RegisterMenu();
+            // }
+
+            string password;
+            do
+            {
+                Console.Write("Password:\t");
+                password = Console.ReadLine() ?? string.Empty;
+                if (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password)
+                || password.Length < 8 || !password.Any(char.IsLower) || !password.Any(char.IsUpper) || !password.Any(char.IsDigit))
+                {
+                    Console.Beep();
+                    Console.WriteLine("Password is required. Please enter a valid password");
+                }
+            }
+            while (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password)
+            || password.Length < 8 || !password.Any(char.IsLower) || !password.Any(char.IsUpper) || !password.Any(char.IsDigit));
+
+            // Console.Write("Password:\t");
+            // string password = Console.ReadLine() ?? string.Empty;
+            // if (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password))
+            // {
+            //     Console.Beep();
+            //     Console.WriteLine("Password is required");
+            //     RegisterMenu();
+            // }
+            // else if (password.Length < 8 || !password.Any(char.IsLower) || !password.Any(char.IsUpper) || !password.Any(char.IsDigit))
+            // {
+            //     Console.WriteLine("Invalid password");
+            //     RegisterMenu();
+            // }
 
             Console.Write("Date of birth (yyyy-mm-dd):\t");
             string? dOB = Console.ReadLine();
-            if (!DateOnly.TryParse(dOB, out DateOnly dateOfBirth))
+            DateOnly dateOfBirth;
+            while (!DateOnly.TryParse(dOB, out dateOfBirth))
             {
                 Console.WriteLine("D.O.B not in correct format");
-                RegisterMenu();
+                Console.Write("Date of birth (yyyy-mm-dd):\t");
             }
 
             foreach (Gender gender in Enum.GetValues(typeof(Gender)))
@@ -133,15 +191,12 @@ namespace SocialMediaPostManager.Menus
                 Console.WriteLine($"Press {(int)gender}. {gender}");
             }
             Console.Write("Gender:\t");
-            if (!int.TryParse(Console.ReadLine(), out int choice))
+            string? input = Console.ReadLine();
+            int choice;
+            while (!int.TryParse(input, out choice) || choice > 2)
             {
                 Console.WriteLine("Input from (1-2)");
-                RegisterMenu();
-            }
-            else if (choice > 2)
-            {
-                Console.WriteLine("Invalid Input");
-                RegisterMenu();
+                Console.Write("Gender:\t");
             }
 
             var getgender = "";

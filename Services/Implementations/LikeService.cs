@@ -37,7 +37,7 @@ namespace SocialMediaPostManager.Services.Implementations
                 return new Result<string>
                 {
                     Data = null,
-                    Message = "Post has already liked",
+                    Message = "Post has already been liked by you",
                     Status = false
                 };
             }
@@ -50,8 +50,8 @@ namespace SocialMediaPostManager.Services.Implementations
             return new Result<string>
             {
                 Data = like.Id.ToString(),
-                Message = $"You have succesfully like post with Id: {like.PostId}",
-                Status = false
+                Message = $"You have successfully liked post Title: {post.Title}",
+                Status = true
             };
         }
 

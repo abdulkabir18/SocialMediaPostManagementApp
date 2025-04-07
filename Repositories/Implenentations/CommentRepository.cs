@@ -107,8 +107,8 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             sqlCommand.Parameters.AddWithValue("@Id", comment.Id);
             sqlCommand.Parameters.AddWithValue("@PostId", comment.PostId);
             sqlCommand.Parameters.AddWithValue("@Message", comment.Message);
-            sqlCommand.Parameters.AddWithValue("@DateComment", comment.DateCreated.ToString());
-            sqlCommand.Parameters.AddWithValue("@CommentBy", comment.CreatedBy?.ToString());
+            sqlCommand.Parameters.AddWithValue("@DateComment", comment.DateCreated);
+            sqlCommand.Parameters.AddWithValue("@CommentBy", comment.CreatedBy);
             sqlCommand.Parameters.AddWithValue("@IsDelete", comment.IsDelete.ToString());
             sqlCommand.ExecuteNonQuery();
         }

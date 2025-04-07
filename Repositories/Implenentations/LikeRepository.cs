@@ -80,7 +80,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", like.Id);
             sqlCommand.Parameters.AddWithValue("@PostId", like.PostId);
-            sqlCommand.Parameters.AddWithValue("@DateLiked", like.DateCreated.ToString());
+            sqlCommand.Parameters.AddWithValue("@DateLiked", like.DateCreated);
             sqlCommand.Parameters.AddWithValue("@LikedBy", like.CreatedBy);
             sqlCommand.Parameters.AddWithValue("@IsDelete", like.IsDelete.ToString());
             sqlCommand.ExecuteNonQuery();

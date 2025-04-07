@@ -95,8 +95,9 @@ namespace SocialMediaPostManager.Menus
             {
                 foreach (var post in posts)
                 {
-                    Console.WriteLine($"{post.CreatedBy}\n{post.DateCreated.ToString()}\n{post.Title}\n{post.Content}\n{post.LikeCount}\t\t{post.CommentCount}");
-                    Console.WriteLine("\n1.\tLike\n2.\tComment\n3.\tView Comments\n4.\tBack to menu");
+                    Console.WriteLine($"{post.CreatedBy}\n{post.DateCreated.ToString()}\n{post.Title}\n{post.Content}\nLikes: {post.LikeCount}\t\tComments: {post.CommentCount}");
+                    Console.WriteLine("\n1.\tLike\n2.\tComment\n3.\tView Comments\n4.\tBack to menu\nPress any other key to continue");
+                    Console.Write("Select an option: ");
                     var opt = Console.ReadLine();
                     switch (opt)
                     {
@@ -214,9 +215,10 @@ namespace SocialMediaPostManager.Menus
             }
             else
             {
+                Console.WriteLine("\nViewing Posts");
                 foreach (var post in posts)
                 {
-                    Console.WriteLine($"{post.CreatedBy}\n{post.DateCreated.ToString()}\n{post.Title}\n{post.Content}\n{post.LikeCount}\t\t{post.CommentCount}");
+                    Console.WriteLine($"{post.CreatedBy}\n{post.DateCreated.ToString()}\n{post.Title}\n{post.Content}\nLikes: {post.LikeCount}\t\tComments: {post.CommentCount}");
                 }
             }
 
