@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using SocialMediaPostManager.Context;
 using SocialMediaPostManager.Models.Entities;
@@ -27,6 +23,21 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             sqlCommand.Parameters.AddWithValue("@PostId", id);
             var result = sqlCommand.ExecuteScalar();
             return Convert.ToInt32(result);
+        }
+
+        public bool CheckComment(Guid id)
+        {
+            using var connection = _sociaMediapostManagerContext.OpenConnection();
+            connection.Open();
+            var query = "select Id from comments where (Id = @Id)";
+            MySqlCommand sqlCommand = new MySqlCommand(query, connection);
+            sqlCommand.Parameters.AddWithValue("@Id", id);
+            using var reader = sqlCommand.ExecuteReader();
+            if (reader.Read())
+            {
+                return true;
+            }
+            return false;
         }
 
         public Comment? GetComment(Guid id)
@@ -101,15 +112,14 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = @"insert into comments(Id,PostId,Message,DateComment,CommentBy,IsDelete) 
-                values(@Id,@PostId,@Message,@DateComment,@CommentBy,@IsDelete)";
+            var query = @"insert into comments(Id,PostId,Message,DateComment,CommentBy) 
+                values(@Id,@PostId,@Message,@DateComment,@CommentBy)";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", comment.Id);
             sqlCommand.Parameters.AddWithValue("@PostId", comment.PostId);
             sqlCommand.Parameters.AddWithValue("@Message", comment.Message);
             sqlCommand.Parameters.AddWithValue("@DateComment", comment.DateCreated);
             sqlCommand.Parameters.AddWithValue("@CommentBy", comment.CreatedBy);
-            sqlCommand.Parameters.AddWithValue("@IsDelete", comment.IsDelete.ToString());
             sqlCommand.ExecuteNonQuery();
         }
 
@@ -121,6 +131,16 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", comment.Id);
             sqlCommand.Parameters.AddWithValue("@Message", comment.Message);
+            sqlCommand.ExecuteNonQuery();
+        }
+
+        public void Delete(Guid id)
+        {
+            using var connection = _sociaMediapostManagerContext.OpenConnection();
+            connection.Open();
+            var query = "delete from comments where Id = @Id";
+            MySqlCommand sqlCommand = new MySqlCommand(query, connection);
+            sqlCommand.Parameters.AddWithValue("@Id", id);
             sqlCommand.ExecuteNonQuery();
         }
     }

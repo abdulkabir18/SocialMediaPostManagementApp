@@ -6,7 +6,7 @@ namespace SocialMediaPostManager.Services.Interfaces
     {
         Result<string> RegisterMediaUser(RegisterSocialMediaUserRequestModel register);
         Result<string> EditMediaUser(EditSocialMediaUserRequestModel edit);
-        Result<string> DeleteMediaUser(Guid id);
+        Result<string> DeleteMediaUser(DeleteSocialMediaUserRequestModel delete);
         SocialMediaUserDto? ViewSocialMediaUser(string userName);
         SocialMediaUserDto? ViewSocialMediaUser(Guid id);
         SocialMediaUserDto? GetSocialMediaUserByEmail(string email);

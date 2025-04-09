@@ -88,7 +88,6 @@ namespace SocialMediaPostManager.Services.Implementations
                     DateCreated = post.DateCreated,
                     Id = post.Id,
                     SocialMediaUserId = post.SocialMediaUserId,
-                    IsDelete = post.IsDelete,
                     Title = post.Title
                 };
                 posts.Add(_post);
@@ -110,7 +109,6 @@ namespace SocialMediaPostManager.Services.Implementations
                     DateCreated = post.DateCreated,
                     Id = post.Id,
                     SocialMediaUserId = post.SocialMediaUserId,
-                    IsDelete = post.IsDelete,
                     Title = post.Title
                 };
                 posts.Add(_post);
@@ -132,7 +130,6 @@ namespace SocialMediaPostManager.Services.Implementations
                     DateCreated = post.DateCreated,
                     Id = post.Id,
                     SocialMediaUserId = post.SocialMediaUserId,
-                    IsDelete = post.IsDelete,
                     Title = post.Title
                 };
                 posts.Add(_post);
@@ -154,7 +151,6 @@ namespace SocialMediaPostManager.Services.Implementations
                     DateCreated = post.DateCreated,
                     Id = post.Id,
                     SocialMediaUserId = post.SocialMediaUserId,
-                    IsDelete = post.IsDelete,
                     Title = post.Title
                 };
             }

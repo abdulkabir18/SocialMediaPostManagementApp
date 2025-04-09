@@ -1,6 +1,5 @@
 using System.Text.RegularExpressions;
 using SocialMediaPostManager.Dtos;
-using SocialMediaPostManager.Models.Entities;
 using SocialMediaPostManager.Models.Enum;
 using SocialMediaPostManager.Services.Implementations;
 using SocialMediaPostManager.Services.Interfaces;
@@ -14,6 +13,7 @@ namespace SocialMediaPostManager.Menus
         private readonly IPostService _postService;
         private readonly ICommentService _commentService;
         private readonly ILikeService _likeService;
+        private readonly IReplyService _replyService;
 
         public AppMenu()
         {
@@ -22,10 +22,12 @@ namespace SocialMediaPostManager.Menus
             _postService = new PostService();
             _commentService = new CommentService();
             _likeService = new LikeService();
+            _replyService = new ReplyService();
         }
 
         public void StartApp()
         {
+            Console.WriteLine("\n\t\t\t\tWelcome To K Post Management\n\t\t\t\t----------------------------\n");
             Console.WriteLine("1.\tRegister Account\n2.\tLogin");
             string? opt = Console.ReadLine();
             if (string.IsNullOrEmpty(opt))
@@ -61,7 +63,7 @@ namespace SocialMediaPostManager.Menus
                 if (string.IsNullOrEmpty(firstName) || string.IsNullOrWhiteSpace(firstName))
                 {
                     Console.Beep();
-                    Console.WriteLine("FirstName is required. Please enter a valid input");
+                    Console.WriteLine("Name is required. Please enter a valid input");
                 }
             }
             while (string.IsNullOrEmpty(firstName) || string.IsNullOrWhiteSpace(firstName));
@@ -75,7 +77,7 @@ namespace SocialMediaPostManager.Menus
                 if (string.IsNullOrEmpty(lastName) || string.IsNullOrWhiteSpace(lastName))
                 {
                     Console.Beep();
-                    Console.WriteLine("LastName is required. Please enter a valid input");
+                    Console.WriteLine("Name is required. Please enter a valid input");
                 }
             }
             while (string.IsNullOrEmpty(lastName) || string.IsNullOrWhiteSpace(lastName));
@@ -107,20 +109,6 @@ namespace SocialMediaPostManager.Menus
             }
             while (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email) || !Regex.IsMatch(email, pattern));
 
-            // Console.Write("Email:\t");
-            // string email = Console.ReadLine() ?? string.Empty;
-            // if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
-            // {
-            //     Console.Beep();
-            //     Console.WriteLine("Email is required");
-            //     RegisterMenu();
-            // }
-            // else if (!email.EndsWith("@gmail.com") || email.Length < 20)
-            // {
-            //     Console.WriteLine("Invalid email");
-            //     RegisterMenu();
-            // }
-
             string userName;
             do
             {
@@ -129,24 +117,10 @@ namespace SocialMediaPostManager.Menus
                 if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName) || !userName.All(char.IsLetterOrDigit))
                 {
                     Console.Beep();
-                    Console.WriteLine("Username is required");
+                    Console.WriteLine("Username is required. Enter a valid username");
                 }
             }
             while (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName) || !userName.All(char.IsLetterOrDigit));
-
-            // Console.Write("UserName:\t");
-            // string userName = Console.ReadLine() ?? string.Empty;
-            // if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
-            // {
-            //     Console.Beep();
-            //     Console.WriteLine("Username is required");
-            //     RegisterMenu();
-            // }
-            // else if (!userName.All(char.IsLetterOrDigit))
-            // {
-            //     Console.WriteLine("Username must only contain letters and numbers");
-            //     RegisterMenu();
-            // }
 
             string password;
             do
@@ -163,22 +137,8 @@ namespace SocialMediaPostManager.Menus
             while (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password)
             || password.Length < 8 || !password.Any(char.IsLower) || !password.Any(char.IsUpper) || !password.Any(char.IsDigit));
 
-            // Console.Write("Password:\t");
-            // string password = Console.ReadLine() ?? string.Empty;
-            // if (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password))
-            // {
-            //     Console.Beep();
-            //     Console.WriteLine("Password is required");
-            //     RegisterMenu();
-            // }
-            // else if (password.Length < 8 || !password.Any(char.IsLower) || !password.Any(char.IsUpper) || !password.Any(char.IsDigit))
-            // {
-            //     Console.WriteLine("Invalid password");
-            //     RegisterMenu();
-            // }
-
             Console.Write("Date of birth (yyyy-mm-dd):\t");
-            string? dOB = Console.ReadLine();
+            string dOB = Console.ReadLine()!;
             DateOnly dateOfBirth;
             while (!DateOnly.TryParse(dOB, out dateOfBirth))
             {
@@ -236,20 +196,42 @@ namespace SocialMediaPostManager.Menus
 
         public void LoginMenu()
         {
-            Console.Write("Email:\t");
-            string email = Console.ReadLine()!;
-            Console.Write("Password:\t");
-            string password = Console.ReadLine()!;
-            if (email == null || password == null)
+            string email;
+            do
             {
-                Console.WriteLine("email or password cant be null");
-                LoginMenu();
-                return;
+                Console.Write("Email:\t");
+                email = Console.ReadLine()!;
+                if (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email))
+                {
+                    Console.Beep();
+                    Console.WriteLine("email is required");
+                }
             }
+            while (string.IsNullOrEmpty(email) || string.IsNullOrWhiteSpace(email));
+
+            string password;
+            do
+            {
+                Console.Write("Password:\t");
+                password = Console.ReadLine()!;
+                if (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password))
+                {
+                    Console.WriteLine("password is required");
+                }
+            }
+            while (string.IsNullOrEmpty(password) || string.IsNullOrWhiteSpace(password));
+
             Result<UserDto>? response = _userService.Login(new LoginUserRequsetModel { Email = email, Password = password });
             if (response == null || response.Data == null)
             {
                 Console.WriteLine($"{response?.Message}\nTry Again!!!");
+                StartApp();
+                return;
+            }
+
+            if (!response.Status)
+            {
+                Console.WriteLine($"Error login: {response.Message}");
                 StartApp();
             }
             else
@@ -257,11 +239,13 @@ namespace SocialMediaPostManager.Menus
                 if (response.Data.Role == Role.Admin)
                 {
                     Console.WriteLine(response.Message);
+                    Console.ReadLine();
                     AdminStart();
                 }
                 else if (response.Data.Role == Role.User)
                 {
                     Console.WriteLine(response.Message);
+                    Console.ReadLine();
                     UserStart();
                 }
             }

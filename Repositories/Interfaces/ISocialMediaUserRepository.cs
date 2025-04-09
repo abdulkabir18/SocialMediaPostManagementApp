@@ -10,7 +10,8 @@ namespace SocialMediaPostManager.Repositories.Interfaces
     {
         void Persist(SocialMediaUser mediaUser);
         void Update(SocialMediaUser mediaUser);
-        SocialMediaUser? GetMediaUser(string userName);
+        void SoftDelete(string email);
+        SocialMediaUser? GetMediaUser(string email);
         bool CheckIfUserNameExist(string userName);
         SocialMediaUser? GetMediaUser(Guid id);
         ICollection<SocialMediaUser> GetMediaUsers();

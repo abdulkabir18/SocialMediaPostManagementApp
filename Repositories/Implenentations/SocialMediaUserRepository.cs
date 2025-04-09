@@ -34,13 +34,13 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             return false;
         }
 
-        public SocialMediaUser? GetMediaUser(string userName)
+        public SocialMediaUser? GetMediaUser(string email)
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = "select Email,FirstName,LastName,UserName,Address,Gender,IsDelete,DateOfBirth from SocialMediaUsers where(Username = @Username)";
+            var query = "select Id,Email,FirstName,LastName,UserName,Address,Gender,IsDelete,DateOfBirth from SocialMediaUsers where(Email = @Email)";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
-            sqlCommand.Parameters.AddWithValue("@UserName", userName);
+            sqlCommand.Parameters.AddWithValue("@Email", email);
             var reader = sqlCommand.ExecuteReader();
             if (reader.Read())
             {
@@ -124,7 +124,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                 values(@Id,@Email,@FirstName,@LastName,@UserName,@Gender,@Address,@DateOfBirth,@IsDelete)";
                 MySqlCommand sqlCommand = new MySqlCommand(query, connection);
                 sqlCommand.Parameters.AddWithValue("@Id", mediaUser.Id);
-                sqlCommand.Parameters.AddWithValue("@Email", mediaUser.Email);
+                sqlCommand.Parameters.AddWithValue("@Email", mediaUser.Email.ToLower());
                 sqlCommand.Parameters.AddWithValue("@FirstName", mediaUser.FirstName);
                 sqlCommand.Parameters.AddWithValue("@LastName", mediaUser.LastName);
                 sqlCommand.Parameters.AddWithValue("@UserName", mediaUser.UserName);
@@ -150,6 +150,17 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             sqlCommand.Parameters.AddWithValue("@Gender", mediaUser.Gender);
             sqlCommand.Parameters.AddWithValue("@Address", mediaUser.Address);
             sqlCommand.Parameters.AddWithValue("@DateOfBirth", mediaUser.DateOfBirth.ToString("yyyy-MM-dd"));
+            sqlCommand.ExecuteNonQuery();
+        }
+
+        public void SoftDelete(string email)
+        {
+            using var connection = _sociaMediapostManagerContext.OpenConnection();
+            connection.Open();
+            var query = @"update SocialMediaUsers set IsDelete = @IsDelete where Email=@Email";
+            MySqlCommand sqlCommand = new MySqlCommand(query, connection);
+            sqlCommand.Parameters.AddWithValue("@Email", email);
+            sqlCommand.Parameters.AddWithValue("@IsDelete", true.ToString());
             sqlCommand.ExecuteNonQuery();
         }
     }

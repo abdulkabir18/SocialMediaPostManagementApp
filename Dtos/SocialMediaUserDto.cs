@@ -28,6 +28,11 @@ namespace SocialMediaPostManager.Dtos
         public DateOnly DateOfBirth { get; set; }
     }
 
+    public class DeleteSocialMediaUserRequestModel
+    {
+        public required string Email { get; set; }
+    }
+
     public class RegisterSocialMediaUserRequestModel
     {
         public required string UserName { get; set; }

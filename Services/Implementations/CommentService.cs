@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using SocialMediaPostManager.Dtos;
 using SocialMediaPostManager.Models.Entities;
 using SocialMediaPostManager.Repositories.Implenentations;
@@ -14,11 +10,13 @@ namespace SocialMediaPostManager.Services.Implementations
     {
         private readonly IPostRepository _postRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly IReplyRepository _replyRepository;
 
         public CommentService()
         {
             _postRepository = new PostRepository();
             _commentRepository = new CommentRepository();
+            _replyRepository = new ReplyRepository();
         }
 
         public Result<string> AddComment(CommentRequestModel commentRequestModel)
@@ -45,7 +43,7 @@ namespace SocialMediaPostManager.Services.Implementations
             return new Result<string>
             {
                 Data = comment.Id.ToString(),
-                Message = $"You have successfully commented on post with Id: {comment.PostId}",
+                Message = $"You have successfully commented on post Title: {post.Title}",
                 Status = true
             };
         }
@@ -73,20 +71,38 @@ namespace SocialMediaPostManager.Services.Implementations
             };
         }
 
-        public ICollection<CommentDto> GetAllComments()
+        // public ICollection<CommentDto> GetAllComments()
+        // {
+        //     List<CommentDto> comments = [];
+        //     foreach (var comment in _commentRepository.GetComments())
+        //     {
+        //         comments.Add(new CommentDto
+        //         {
+        //             Id = comment.Id,
+        //             CreatedBy = comment.CreatedBy,
+        //             Message = comment.Message,
+        //             DateCreated = comment.DateCreated,
+        //             ReplyCount = _replyRepository.GetReplyCount(comment.Id)
+        //         });
+        //     }
+        //     return comments;
+        // }
+
+        public CommentDto? GetComment(Guid id)
         {
-            List<CommentDto> comments = [];
-            foreach (var comment in _commentRepository.GetComments())
+            var comment = _commentRepository.GetComment(id);
+            if (comment != null)
             {
-                comments.Add(new CommentDto
+                return new CommentDto
                 {
                     Id = comment.Id,
                     CreatedBy = comment.CreatedBy,
                     Message = comment.Message,
-                    DateCreated = comment.DateCreated
-                });
+                    DateCreated = comment.DateCreated,
+                    ReplyCount = _replyRepository.GetReplyCount(comment.Id)
+                };
             }
-            return comments;
+            return null;
         }
 
         public ICollection<CommentDto> GetComments(Guid id)
@@ -99,7 +115,8 @@ namespace SocialMediaPostManager.Services.Implementations
                     Id = comment.Id,
                     CreatedBy = comment.CreatedBy,
                     Message = comment.Message,
-                    DateCreated = comment.DateCreated
+                    DateCreated = comment.DateCreated,
+                    ReplyCount = _replyRepository.GetReplyCount(comment.Id)
                 });
             }
             return comments;
@@ -115,7 +132,8 @@ namespace SocialMediaPostManager.Services.Implementations
                     Id = comment.Id,
                     CreatedBy = comment.CreatedBy,
                     Message = comment.Message,
-                    DateCreated = comment.DateCreated
+                    DateCreated = comment.DateCreated,
+                    ReplyCount = _replyRepository.GetReplyCount(comment.Id)
                 });
             }
             return comments;

@@ -35,8 +35,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                     Title = reader["Title"].ToString(),
                     SocialMediaUserId = Guid.Parse(reader["SocialMediaUserId"].ToString() ?? ""),
                     CreatedBy = reader["CreatedBy"].ToString(),
-                    DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? ""),
-                    IsDelete = Convert.ToBoolean(reader["IsDelete"])
+                    DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? "")
                 };
             }
             return null;
@@ -60,8 +59,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                         Title = reader["Title"].ToString(),
                         SocialMediaUserId = Guid.Parse(reader["SocialMediaUserId"].ToString() ?? ""),
                         CreatedBy = reader["CreatedBy"].ToString(),
-                        DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? ""),
-                        IsDelete = Convert.ToBoolean(reader["IsDelete"])
+                        DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? "")
                     }
                 );
             }
@@ -87,8 +85,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                         Title = reader["Title"].ToString(),
                         SocialMediaUserId = Guid.Parse(reader["SocialMediaUserId"].ToString() ?? ""),
                         CreatedBy = reader["CreatedBy"].ToString(),
-                        DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? ""),
-                        IsDelete = Convert.ToBoolean(reader["IsDelete"])
+                        DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? "")
                     }
                 );
             }
@@ -114,8 +111,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                         Title = reader["Title"].ToString(),
                         SocialMediaUserId = Guid.Parse(reader["SocialMediaUserId"].ToString() ?? ""),
                         CreatedBy = reader["CreatedBy"].ToString(),
-                        DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? ""),
-                        IsDelete = Convert.ToBoolean(reader["IsDelete"])
+                        DateCreated = DateTime.Parse(reader["DateCreated"].ToString() ?? "")
                     }
                 );
             }
@@ -126,8 +122,8 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = @"insert into posts(Id,Title,Content,SocialMediaUserId,DateCreated,CreatedBy,IsDelete) 
-                values(@Id,@Title,@Content,@SocialMediaUserId,@DateCreated,@CreatedBy,@IsDelete)";
+            var query = @"insert into posts(Id,Title,Content,SocialMediaUserId,DateCreated,CreatedBy) 
+                values(@Id,@Title,@Content,@SocialMediaUserId,@DateCreated,@CreatedBy)";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", post.Id);
             sqlCommand.Parameters.AddWithValue("@Title", post.Title);
@@ -135,7 +131,6 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             sqlCommand.Parameters.AddWithValue("@SocialMediaUserId", post.SocialMediaUserId);
             sqlCommand.Parameters.AddWithValue("@DateCreated", post.DateCreated);
             sqlCommand.Parameters.AddWithValue("@CreatedBy", post.CreatedBy);
-            sqlCommand.Parameters.AddWithValue("@IsDelete", post.IsDelete.ToString());
             sqlCommand.ExecuteNonQuery();
         }
 
@@ -148,6 +143,16 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             sqlCommand.Parameters.AddWithValue("@Id", post.Id);
             sqlCommand.Parameters.AddWithValue("@Title", post.Title);
             sqlCommand.Parameters.AddWithValue("@Content", post.Content);
+            sqlCommand.ExecuteNonQuery();
+        }
+
+        public void Delete(Guid id)
+        {
+            using var connection = _sociaMediapostManagerContext.OpenConnection();
+            connection.Open();
+            var query = "delete from posts where Id = @Id";
+            MySqlCommand sqlCommand = new MySqlCommand(query, connection);
+            sqlCommand.Parameters.AddWithValue("@Id", id);
             sqlCommand.ExecuteNonQuery();
         }
     }

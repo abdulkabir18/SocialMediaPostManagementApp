@@ -5,8 +5,9 @@ namespace SocialMediaPostManager.Repositories.Interfaces
     public interface ILikeRepository
     {
         void Persist(Like like);
+        void Delete(Guid id);
         ICollection<Like> GetLikes(Guid id);
         ICollection<Like> GetLikes();
-        int GetLikeCount(Guid id);
+        int GetLikeCount(Guid postId);
     }
 }

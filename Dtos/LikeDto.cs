@@ -12,6 +12,11 @@ namespace SocialMediaPostManager.Dtos
         public string? CreatedBy { get; set; }
     }
 
+    public class DeleteLikeRequestModel
+    {
+        public Guid Id { get; set; }
+    }
+
     public class MakeLikeRequestModel
     {
         public string? CreatedBy { get; set; }

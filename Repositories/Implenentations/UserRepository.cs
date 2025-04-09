@@ -85,7 +85,7 @@ namespace SocialMediaPostManager.Repositories.Implenentations
                 Id,Email,Password,Role,IsDelete) values(@Id,@Email,@Password,@Role,@IsDelete)";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", user.Id);
-            sqlCommand.Parameters.AddWithValue("@Email", user.Email);
+            sqlCommand.Parameters.AddWithValue("@Email", user.Email.ToLower());
             sqlCommand.Parameters.AddWithValue("@Password", user.Password);
             sqlCommand.Parameters.AddWithValue("@Role", user.Role.ToString());
             sqlCommand.Parameters.AddWithValue("@IsDelete", user.IsDelete.ToString());
@@ -116,6 +116,17 @@ namespace SocialMediaPostManager.Repositories.Implenentations
             sqlCommand.Parameters.AddWithValue("@Id", user.Id);
             sqlCommand.Parameters.AddWithValue("@Email", user.Email);
             sqlCommand.Parameters.AddWithValue("@Password", user.Password);
+            sqlCommand.ExecuteNonQuery();
+        }
+
+        public void SoftDelete(string email)
+        {
+            using var connection = _sociaMediapostManagerContext.OpenConnection();
+            connection.Open();
+            var query = @"update users set IsDelete=@IsDelete where Email=@Email";
+            MySqlCommand sqlCommand = new MySqlCommand(query, connection);
+            sqlCommand.Parameters.AddWithValue("@Email", email);
+            sqlCommand.Parameters.AddWithValue("@IsDelete", true.ToString());
             sqlCommand.ExecuteNonQuery();
         }
     }

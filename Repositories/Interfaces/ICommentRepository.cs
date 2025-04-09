@@ -9,7 +9,9 @@ namespace SocialMediaPostManager.Repositories.Interfaces
     public interface ICommentRepository
     {
         void Persist(Comment comment);
+        bool CheckComment(Guid id);
         void Update(Comment comment);
+        void Delete(Guid id);
         Comment? GetComment(Guid id);
         ICollection<Comment> GetComments(Guid id);
         ICollection<Comment> GetComments();

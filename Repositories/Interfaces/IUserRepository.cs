@@ -10,6 +10,7 @@ namespace SocialMediaPostManager.Repositories.Interfaces
     {
         void Persist(User user);
         void Update(User user);
+        void SoftDelete(string email);
         User? GetUser(string email, string password);
         bool CheckIfEmailExist(string email);
         bool CheckIfPasswordExist(string password);

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SocialMediaPostManager")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+513affa750e164b70a253f497b593da6399f1aa3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+820242997aed9315462ac660974adca1b9396354")]
 [assembly: System.Reflection.AssemblyProductAttribute("SocialMediaPostManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SocialMediaPostManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

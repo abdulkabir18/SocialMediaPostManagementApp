@@ -12,38 +12,106 @@ namespace SocialMediaPostManager.Services.Implementations
     {
         private readonly IUserRepository _userRepository;
         private readonly ISocialMediaUserRepository _socialMediaUserRepository;
+        private readonly IPostRepository _postRepository;
+        private readonly ICommentRepository _commentRepository;
+        private readonly ILikeRepository _likeRepository;
+        private readonly IReplyRepository _replyRepository;
 
         public SocialMediaUserService()
         {
             _userRepository = new UserRepository();
             _socialMediaUserRepository = new SocialMediaUserRepository();
+            _postRepository = new PostRepository();
+            _commentRepository = new CommentRepository();
+            _replyRepository = new ReplyRepository();
+            _likeRepository = new LikeRepository();
         }
 
-        public Result<string> DeleteMediaUser(Guid id)
+        public Result<string> DeleteMediaUser(DeleteSocialMediaUserRequestModel delete)
         {
-            SocialMediaUser? user = _socialMediaUserRepository.GetMediaUser(id);
-            var _user = _userRepository.GetUsers().SingleOrDefault(a => a.Email == user?.Email);
-            if (user == null || _user == null)
+            var mediaUser = _socialMediaUserRepository.GetMediaUser(delete.Email.ToLower());
+            if (mediaUser != null)
             {
-                return new Result<string>
+                bool checkPosts = _postRepository.GetPosts().Any(post => post.SocialMediaUserId == mediaUser.Id);
+                if (!checkPosts)
                 {
-                    Status = false,
-                    Message = $"No details found for",
-                    Data = null
-                };
-            }
-            _user.IsDelete = true;
-            _userRepository.Update(_user);
+                    _userRepository.SoftDelete(mediaUser.Email);
+                    _socialMediaUserRepository.SoftDelete(mediaUser.Email);
 
-            user.IsDelete = true;
-            _socialMediaUserRepository.Update(user);
+                    return new Result<string>
+                    {
+                        Status = true,
+                        Data = mediaUser.Id.ToString(),
+                        Message = "Account deleted successfully"
+                    };
+                }
+                else
+                {
+                    var posts = _postRepository.GetPosts(mediaUser.Id);
+                    foreach (var post in posts)
+                    {
+                        bool checkComment = _commentRepository.GetComments().Any(comment => comment.PostId == post.Id);
+                        bool checkLike = _likeRepository.GetLikes().Any(like => like.PostId == post.Id);
+                        if (checkLike)
+                        {
+                            _likeRepository.Delete(post.Id);
+                        }
+
+                        if (checkComment)
+                        {
+                            var comments = _commentRepository.GetComments(post.Id);
+                            foreach (var comment in comments)
+                            {
+                                bool checkReply = _replyRepository.GetReplies().Any(reply => reply.CommentId == comment.Id);
+                                if (checkLike)
+                                {
+                                    _replyRepository.Delete(comment.Id);
+                                }
+                                _commentRepository.Delete(comment.Id);
+                            }
+                        }
+
+                        _postRepository.Delete(post.Id);
+                    }
+
+                    return new Result<string>
+                    {
+                        Status = true,
+                        Data = mediaUser.Id.ToString(),
+                        Message = "Account deleted successfully"
+                    };
+                }
+            }
 
             return new Result<string>
             {
-                Status = true,
-                Message = $"{user.FirstName} {user.LastName} account deleted successfully",
-                Data = user.Id.ToString()
+                Status = false,
+                Data = null,
+                Message = "Account not found"
             };
+            // SocialMediaUser? user = _socialMediaUserRepository.GetMediaUser(id);
+            // var _user = _userRepository.GetUsers().SingleOrDefault(a => a.Email == user?.Email);
+            // if (user == null || _user == null)
+            // {
+            //     return new Result<string>
+            //     {
+            //         Status = false,
+            //         Message = $"No details found for",
+            //         Data = null
+            //     };
+            // }
+            // _user.IsDelete = true;
+            // _userRepository.Update(_user);
+
+            // user.IsDelete = true;
+            // _socialMediaUserRepository.Update(user);
+
+            // return new Result<string>
+            // {
+            //     Status = true,
+            //     Message = $"{user.FirstName} {user.LastName} account deleted successfully",
+            //     Data = user.Id.ToString()
+            // };
         }
 
         public Result<string> EditMediaUser(EditSocialMediaUserRequestModel edit)
@@ -80,16 +148,16 @@ namespace SocialMediaPostManager.Services.Implementations
             //     };
             // }
 
-            // bool isUserNameExist = _socialMediaUserRepository.CheckIfUserNameExist(edit.UserName);
-            // if (isUserNameExist)
-            // {
-            //     return new Result<string>
-            //     {
-            //         Status = false,
-            //         Message = $"UserName is already taken",
-            //         Data = null
-            //     };
-            // }
+            bool isUserNameExist = _socialMediaUserRepository.CheckIfUserNameExist(edit.UserName);
+            if (mediauser.UserName == edit.UserName || isUserNameExist)
+            {
+                return new Result<string>
+                {
+                    Status = false,
+                    Message = $"UserName is already taken",
+                    Data = null
+                };
+            }
 
 
             mediauser.FirstName = edit.FirstName;
@@ -158,7 +226,7 @@ namespace SocialMediaPostManager.Services.Implementations
                 return new Result<string>
                 {
                     Status = false,
-                    Message = $"Password is already exists",
+                    Message = "This password cant be use",
                     Data = null
                 };
             }
@@ -171,7 +239,7 @@ namespace SocialMediaPostManager.Services.Implementations
             };
             var mediaUser = new SocialMediaUser
             {
-                Email = register.Email.ToLower(),
+                Email = register.Email,
                 FirstName = register.FirstName,
                 LastName = register.LastName,
                 Address = register.Address,
@@ -211,9 +279,9 @@ namespace SocialMediaPostManager.Services.Implementations
             return mediaUsers;
         }
 
-        public SocialMediaUserDto? ViewSocialMediaUser(string userName)
+        public SocialMediaUserDto? ViewSocialMediaUser(string email)
         {
-            var mediaUser = _socialMediaUserRepository.GetMediaUser(userName);
+            var mediaUser = _socialMediaUserRepository.GetMediaUser(email);
             if (mediaUser != null)
             {
                 return new SocialMediaUserDto

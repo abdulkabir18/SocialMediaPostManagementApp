@@ -26,7 +26,6 @@ create table if not exists Posts
     SocialMediaUserId char(36) not null,
     DateCreated DATETIME not null,
     CreatedBy varchar(200) not null,
-    IsDelete varchar(20) not null,
     Foreign Key(SocialMediaUserId) references SocialMediaUsers(Id)
 );
 create table if not exists Likes
@@ -35,7 +34,6 @@ create table if not exists Likes
     PostId char(150) not null,
     DateLiked DATETIME not null,
     LikedBy varchar(200) not null,
-    IsDelete varchar(20) not null,
     Foreign Key(PostId) references Posts(Id)
 );
 create table if not exists Comments
@@ -45,6 +43,16 @@ create table if not exists Comments
     Message varchar(200) null,
     DateComment DATETIME not null,
     CommentBy varchar(200) not null,
-    IsDelete varchar(20) not null,
     Foreign Key(PostId) references Posts(Id)
+);
+create table if not exists Replies
+(
+    Id char(36) Primary key not null unique,
+    CommentId char(150) not null,
+    Message varchar(300) null,
+    DateReply DATETIME not null,
+    ReplyBy varchar(200) not null,
+    MediaUserId char(150) not null,
+    Foreign Key(CommentId) references Comments(Id),
+    Foreign Key(MediaUserId) references SocialMediaUsers(Id)
 );

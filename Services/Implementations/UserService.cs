@@ -50,6 +50,15 @@ namespace SocialMediaPostManager.Services.Implementations
                     Data = null
                 };
             }
+            if (user.IsDelete)
+            {
+                return new Result<UserDto>
+                {
+                    Status = false,
+                    Message = "Your account has been deactivated.",
+                    Data = null
+                };
+            }
             var userDto = new UserDto
             {
                 Email = user.Email,

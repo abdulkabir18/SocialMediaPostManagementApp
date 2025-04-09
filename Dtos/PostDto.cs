@@ -8,7 +8,6 @@ namespace SocialMediaPostManager.Dtos
     public class PostDto
     {
         public Guid Id { get; set; }
-        public bool IsDelete { get; set; }
         public DateTime DateCreated { get; set; }
         public string? CreatedBy { get; set; }
         public string? Title { get; set; }
@@ -23,6 +22,11 @@ namespace SocialMediaPostManager.Dtos
         public Guid Id { get; set; }
         public string? Title { get; set; }
         public required string Content { get; set; }
+    }
+
+    public class DeletePostRequestModel
+    {
+        public Guid Id { get; set; }
     }
 
     public class CreatePostRequestModel

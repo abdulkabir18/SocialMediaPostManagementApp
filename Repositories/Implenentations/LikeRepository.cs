@@ -75,14 +75,23 @@ namespace SocialMediaPostManager.Repositories.Implenentations
         {
             using var connection = _sociaMediapostManagerContext.OpenConnection();
             connection.Open();
-            var query = @"insert into likes(Id,PostId,DateLiked,LikedBy,IsDelete) 
-                values(@Id,@PostId,@DateLiked,@LikedBy,@IsDelete);";
+            var query = @"insert into likes(Id,PostId,DateLiked,LikedBy) 
+                values(@Id,@PostId,@DateLiked,@LikedBy);";
             MySqlCommand sqlCommand = new MySqlCommand(query, connection);
             sqlCommand.Parameters.AddWithValue("@Id", like.Id);
             sqlCommand.Parameters.AddWithValue("@PostId", like.PostId);
             sqlCommand.Parameters.AddWithValue("@DateLiked", like.DateCreated);
             sqlCommand.Parameters.AddWithValue("@LikedBy", like.CreatedBy);
-            sqlCommand.Parameters.AddWithValue("@IsDelete", like.IsDelete.ToString());
+            sqlCommand.ExecuteNonQuery();
+        }
+
+        public void Delete(Guid postId)
+        {
+            using var connection = _sociaMediapostManagerContext.OpenConnection();
+            connection.Open();
+            var query = "delete from likes where PostId = @PostId";
+            MySqlCommand sqlCommand = new MySqlCommand(query, connection);
+            sqlCommand.Parameters.AddWithValue("@PostId", postId);
             sqlCommand.ExecuteNonQuery();
         }
     }
